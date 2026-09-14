@@ -1,0 +1,25 @@
+[project]
+name = "mcp-devops-agent"
+version = "0.1.0"
+description = "MCP-based demo: scoped, audited DevOps tools for an AI agent"
+requires-python = ">=3.11"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "N"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_unused_ignores = true
+warn_redundant_casts = true
+check_untyped_defs = true
+# mypy only ever runs against mcp_server/, demo/ and tests/ (see
+# .github/workflows/ci.yml) -- the scripts under target-stack/ run inside
+# their own containers, each with only their own image's dependencies
+# installed, and were never meant to be imported as a package.
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

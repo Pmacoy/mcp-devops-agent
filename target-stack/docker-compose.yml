@@ -1,0 +1,61 @@
+# The "corporate app" this demo's MCP server inspects and remediates.
+# Three services on purpose -- enough for list_services to be interesting,
+# small enough to build and boot in a few seconds in CI.
+#
+# `name:` is pinned so mcp_server/docker_cli.py's
+# `label=com.docker.compose.project=mcp-devops-demo` filter is correct
+# regardless of which directory `docker compose` is invoked from.
+name: mcp-devops-demo
+
+services:
+  redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  api:
+    build: ./api
+    depends_on:
+      redis:
+        condition: service_healthy
+    environment:
+      REDIS_URL: redis://redis:6379/0
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python3",
+          "-c",
+          "import urllib.request as u; u.urlopen('http://localhost:8080/health', timeout=2)",
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    restart: unless-stopped
+
+  # Pulls jobs off a Redis list and "processes" them. Demo/scenario.py
+  # pushes a poison job that makes this hang without crashing -- a
+  # realistic stuck-process incident, not a container that just exits.
+  worker:
+    build: ./worker
+    depends_on:
+      redis:
+        condition: service_healthy
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      HEARTBEAT_FILE: /tmp/worker-heartbeat
+      HEARTBEAT_STALE_SECONDS: "12"
+    healthcheck:
+      test: ["CMD", "python3", "/app/healthcheck.py"]
+      interval: 4s
+      timeout: 3s
+      retries: 3
+      start_period: 8s
+    restart: unless-stopped

@@ -1,0 +1,5 @@
+# Runtime dependencies for the MCP server and the demo client.
+# Everything else (docker_cli.py, the audit log, RBAC) is stdlib on
+# purpose -- see docker_cli.py's docstring for why it shells out to the
+# `docker` CLI instead of adding a docker-py dependency.
+mcp==1.27.0
