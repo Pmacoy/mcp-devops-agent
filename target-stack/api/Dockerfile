@@ -3,7 +3,7 @@
 # Stdlib-only on purpose: this service exists to give the demo more than
 # one container to reason about, not to demonstrate a real app framework,
 # so there's no dependency surface worth adding.
-FROM python:3.12-slim
+FROM python:3.14-slim
 
 WORKDIR /app
 COPY app.py .
