@@ -30,7 +30,7 @@ from pathlib import Path
 
 from mcp import ClientSession
 from mcp.client.stdio import StdioServerParameters, stdio_client
-from mcp.types import CallToolResult
+from mcp.types import CallToolResult, TextContent
 
 from demo import scenario
 
@@ -46,8 +46,11 @@ def _tool_call(label: str) -> None:
 
 
 def _content_text(result: CallToolResult) -> str:
+    # isinstance, not a `getattr(block, "type", ...)` check -- mypy can
+    # narrow result.content's union type from this, so `block.text` below
+    # is actually typed instead of `Any`.
     for block in result.content:
-        if getattr(block, "type", None) == "text":
+        if isinstance(block, TextContent):
             return block.text
     raise RuntimeError("tool result had no text content block")
 

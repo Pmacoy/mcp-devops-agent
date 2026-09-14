@@ -10,10 +10,10 @@ worker is the one that breaks.
 from __future__ import annotations
 
 import os
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
-START_TIME = datetime.now(timezone.utc)
+START_TIME = datetime.now(UTC)
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -32,7 +32,7 @@ class Handler(BaseHTTPRequestHandler):
             self._json(200, {"status": "ok"})
             return
         if self.path == "/":
-            uptime = (datetime.now(timezone.utc) - START_TIME).total_seconds()
+            uptime = (datetime.now(UTC) - START_TIME).total_seconds()
             self._json(
                 200,
                 {

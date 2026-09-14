@@ -10,7 +10,7 @@ never by reaching around them.
 
 from __future__ import annotations
 
-import subprocess
+import subprocess  # nosec B404 -- see _redis_cli() below for why
 import time
 
 from mcp_server import docker_cli
@@ -55,7 +55,11 @@ def _wait_for_health(service: str, target: str, timeout: int) -> None:
 
 
 def _redis_cli(container: str, args: list[str]) -> None:
-    result = subprocess.run(
+    # nosec B603,B607 -- fixed "docker" executable, an argument list (never
+    # shell=True), and `container` always comes from docker_cli.resolve_container()
+    # (allow-listed + re-derived from Docker's own labels), never straight from a
+    # caller-supplied string. Same reasoning as mcp_server/docker_cli.py's _run().
+    result = subprocess.run(  # nosec B603,B607
         ["docker", "exec", container, "redis-cli", *args],
         capture_output=True,
         text=True,

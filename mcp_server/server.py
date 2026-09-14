@@ -44,7 +44,7 @@ for _tool in (
 def main() -> None:
     # Touch runtime at startup (not just on first tool call) so a
     # misconfigured MCP_ROLE is visible the moment the server launches,
-    # rather than surfacing later as a confusing PermissionDenied deep in
+    # rather than surfacing later as a confusing PermissionDeniedError deep in
     # a tool call. This MUST go to stderr, never stdout: stdio transport
     # uses stdout exclusively for the JSON-RPC protocol stream, and a
     # single stray print() there would corrupt it from the client's point

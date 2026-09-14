@@ -10,7 +10,7 @@ from unittest import mock
 
 from mcp_server import runtime, tools
 from mcp_server.audit import AuditLogger
-from mcp_server.rbac import PermissionDenied, Role
+from mcp_server.rbac import PermissionDeniedError, Role
 
 
 class ToolsTestCase(unittest.TestCase):
@@ -63,7 +63,7 @@ class TestRestartServiceRbac(ToolsTestCase):
     @mock.patch("mcp_server.tools.docker_cli.restart_service")
     def test_readonly_role_is_denied_before_touching_docker(self, mock_restart) -> None:
         self.set_role(Role.READONLY)
-        with self.assertRaises(PermissionDenied):
+        with self.assertRaises(PermissionDeniedError):
             tools.restart_service(service="worker")
         mock_restart.assert_not_called()
 

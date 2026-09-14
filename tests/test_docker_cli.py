@@ -57,7 +57,12 @@ class TestListServicesFiltersToAllowlist(unittest.TestCase):
     def test_skips_containers_whose_service_label_is_unrecognized(self) -> None:
         containers = [
             {"Names": "mcp-devops-demo-worker-1", "Image": "w", "State": "running", "Status": "Up"},
-            {"Names": "mcp-devops-demo-mystery-1", "Image": "m", "State": "running", "Status": "Up"},
+            {
+                "Names": "mcp-devops-demo-mystery-1",
+                "Image": "m",
+                "State": "running",
+                "Status": "Up",
+            },
         ]
         with mock.patch(
             "mcp_server.docker_cli._list_raw_containers", return_value=containers

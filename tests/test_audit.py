@@ -44,7 +44,10 @@ class TestAuditLogger(unittest.TestCase):
                 AuditRecord(tool=tool, role="operator", arguments={}, allowed=True)
             )
         entries = self.logger.read_all()
-        self.assertEqual([e["tool"] for e in entries], list(("list_services", "get_service_status", "restart_service")))
+        self.assertEqual(
+            [e["tool"] for e in entries],
+            ["list_services", "get_service_status", "restart_service"],
+        )
 
     def test_denied_call_is_recorded_with_error_and_not_ok(self) -> None:
         self.logger.record(

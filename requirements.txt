@@ -2,4 +2,10 @@
 # Everything else (docker_cli.py, the audit log, RBAC) is stdlib on
 # purpose -- see docker_cli.py's docstring for why it shells out to the
 # `docker` CLI instead of adding a docker-py dependency.
-mcp==1.27.0
+#
+# Pinned >=1.28.1, not 1.27.0: Trivy's filesystem scan (security.yml) flagged
+# three real HIGH-severity CVEs fixed between those versions --
+# CVE-2026-52869/52870 (fixed in 1.27.2) and CVE-2026-59950 (fixed in
+# 1.28.1). 1.28.1 is the first version this project ships that carries all
+# three fixes.
+mcp>=1.28.1

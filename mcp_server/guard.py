@@ -15,7 +15,7 @@ from typing import Any, TypeVar
 
 from . import runtime
 from .audit import AuditRecord
-from .rbac import PermissionDenied, Role, require
+from .rbac import PermissionDeniedError, Role, require
 
 F = TypeVar("F", bound=Callable[..., Any])
 
@@ -34,7 +34,7 @@ def guarded(minimum_role: Role) -> Callable[[F], F]:
 
             try:
                 require(runtime.ROLE, minimum_role, tool_name)
-            except PermissionDenied as exc:
+            except PermissionDeniedError as exc:
                 runtime.AUDIT.record(
                     AuditRecord(
                         tool=tool_name,

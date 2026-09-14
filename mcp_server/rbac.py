@@ -50,7 +50,7 @@ _ROLE_RANK: dict[Role, int] = {
 ROLE_ENV_VAR = "MCP_ROLE"
 
 
-class PermissionDenied(PermissionError):
+class PermissionDeniedError(PermissionError):
     """Raised when the server's current role can't call a given tool."""
 
     def __init__(self, tool_name: str, required: Role, actual: Role) -> None:
@@ -78,6 +78,6 @@ def role_from_env(default: Role = Role.READONLY) -> Role:
 
 
 def require(current: Role, minimum: Role, tool_name: str) -> None:
-    """Raise PermissionDenied unless `current` meets or exceeds `minimum`."""
+    """Raise PermissionDeniedError unless `current` meets or exceeds `minimum`."""
     if current.rank < minimum.rank:
-        raise PermissionDenied(tool_name, minimum, current)
+        raise PermissionDeniedError(tool_name, minimum, current)

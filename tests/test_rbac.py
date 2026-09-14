@@ -3,7 +3,7 @@ from __future__ import annotations
 import unittest
 from unittest import mock
 
-from mcp_server.rbac import PermissionDenied, Role, require, role_from_env
+from mcp_server.rbac import PermissionDeniedError, Role, require, role_from_env
 
 
 class TestRoleRank(unittest.TestCase):
@@ -34,7 +34,7 @@ class TestRequire(unittest.TestCase):
         require(Role.OPERATOR, Role.OPERATOR, "some_tool")  # should not raise
 
     def test_denies_when_role_is_below_minimum(self) -> None:
-        with self.assertRaises(PermissionDenied) as ctx:
+        with self.assertRaises(PermissionDeniedError) as ctx:
             require(Role.READONLY, Role.OPERATOR, "restart_service")
         self.assertEqual(ctx.exception.tool_name, "restart_service")
         self.assertEqual(ctx.exception.required, Role.OPERATOR)
