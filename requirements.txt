@@ -8,4 +8,12 @@
 # CVE-2026-52869/52870 (fixed in 1.27.2) and CVE-2026-59950 (fixed in
 # 1.28.1). 1.28.1 is the first version this project ships that carries all
 # three fixes.
-mcp>=1.28.1
+#
+# Capped <2: mcp 2.x renamed/removed the APIs this project is built on
+# (FastMCP -> MCPServer, CallToolResult.isError -> is_error, and more --
+# see the mcp 2.x migration guide). An unbounded ">=1.28.1" let pip resolve
+# straight to 2.x the moment it was published, which is exactly what broke
+# CI here: mcp_server/server.py stopped importing at all. Bumping past 2.x
+# is a real migration, not a routine dependency update -- left to a
+# deliberate follow-up, not Dependabot.
+mcp>=1.28.1,<2
