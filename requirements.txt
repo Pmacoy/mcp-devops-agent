@@ -16,4 +16,4 @@
 # CI here: mcp_server/server.py stopped importing at all. Bumping past 2.x
 # is a real migration, not a routine dependency update -- left to a
 # deliberate follow-up, not Dependabot.
-mcp>=1.28.1,<2
+mcp>=2.2.0,<3
