@@ -10,7 +10,7 @@ never by reaching around them.
 
 from __future__ import annotations
 
-import subprocess  # nosec B404 -- see _redis_cli() below for why
+import subprocess  # nosec B404
 import time
 
 from mcp_server import docker_cli
@@ -60,7 +60,7 @@ def _redis_cli(container: str, args: list[str]) -> None:
     # and `container` always comes from docker_cli.resolve_container()
     # (allow-listed + re-derived from Docker's own labels), never straight
     # from a caller-supplied string.
-    result = subprocess.run(  # nosec B603,B607
+    result = subprocess.run(  # nosec
         ["docker", "exec", container, "redis-cli", *args],
         capture_output=True,
         text=True,

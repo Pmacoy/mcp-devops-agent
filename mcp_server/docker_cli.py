@@ -30,7 +30,7 @@ from __future__ import annotations
 
 import json
 import os
-import subprocess  # nosec B404 -- see _run() below for why
+import subprocess  # nosec B404
 from dataclasses import dataclass
 from typing import Any
 
@@ -76,7 +76,7 @@ def _run(args: list[str]) -> str:
     # ALLOWED_SERVICES / re-derived from Docker's own compose-service label
     # (see resolve_container() above) -- never a raw client string.
     try:
-        result = subprocess.run(  # nosec B603,B607
+        result = subprocess.run(  # nosec
             ["docker", *args],
             capture_output=True,
             text=True,
